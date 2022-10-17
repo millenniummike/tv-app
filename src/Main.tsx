@@ -13,11 +13,23 @@ import {
 } from './index';
 
 import { FaAppStore, FaArtstation } from 'react-icons/fa';
+import axios from "axios";
+import {
+    useQuery,
+    useMutation,
+    useQueryClient,
+    QueryClient,
+    QueryClientProvider,
+  } from '@tanstack/react-query'
+
+  const queryClient = new QueryClient()
 
 init({
     debug: false,
     visualDebug: false
   });
+
+let page = 0
 
 // MOCK DATA
 const assetDataJson = {
@@ -276,17 +288,14 @@ const GlobalStyle = createGlobalStyle`
 function MenuItem(props: any) {
     const onMenuItemFocus = useCallback(
 
-        (x: any, asset: any) => {
-            console.log("Menu focused")
-            console.log(x)
-            console.log(asset) /// ****** WHY!?!?
+        (loc: any, asset: any) => {
+            page=loc.y/130
+            
         }, null
     );
     const { ref, focused } = useFocusable({ onFocus: onMenuItemFocus });
 
-    return <MenuItemBox ref={ref} focused={focused}><FaArtstation /></MenuItemBox>;
-
-    //return <MenuItemBox ref={ref} focused={focused}><MenuTitle>{props.title}</MenuTitle></MenuItemBox>;
+    return <MenuItemBox ref={ref} focused={focused}><FaArtstation /> <MenuTitle>{props.title}</MenuTitle></MenuItemBox>;
 }
 
 function Menu({ focusKey: focusKeyParam }: MenuProps) {
@@ -384,7 +393,7 @@ function Asset({ title, color, width, backgroundImage, onEnterPress, onFocus }: 
 }
 
 function ContentRow({
-    data: AssetData,
+    data: data,
     title: rowTitle,
     onAssetPress,
     onFocus
@@ -407,13 +416,15 @@ function ContentRow({
         [scrollingRef]
     );
 
+    //debugger
+
     return (
         <FocusContext.Provider value={focusKey}>
             <ContentRowWrapper ref={ref}>
                 <ContentRowTitle>{rowTitle}</ContentRowTitle>
                 <ContentRowScrollingWrapper ref={scrollingRef}>
                     <ContentRowScrollingContent>
-                        {AssetData.map(({ title, color, backgroundImage, width }) => (
+                        {data.map(({ title, color, backgroundImage, width }) => (
                             <Asset
                                 backgroundImage={backgroundImage}
                                 width={width}
@@ -431,36 +442,15 @@ function ContentRow({
     );
 }
 
-function Content() {
+function Content({data:data}) {
+    let contentData = data['pages']
+    //contentData = [{"content":[]}];
     const { ref, focusKey } = useFocusable();
 
     const [selectedAsset, setSelectedAsset] = useState(null);
 
     const onAssetPress = useCallback((asset: AssetProps) => {
         setSelectedAsset(asset);
-    }, []);
-
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        const url = 'https://stone-bronzed-river.glitch.me/data.json';
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url);
-                const json = await response.json();
-                console.log("**********")
-                console.log(json.base[0].pages)
-                setData(json.base[0].pages);
-                //setData(assets)
-
-            } catch (error) {
-                console.log('error', error);
-                setData(assets)
-            }
-        };
-
-        fetchData();
     }, []);
 
     const onRowFocus = useCallback(
@@ -472,6 +462,7 @@ function Content() {
         },
         [ref]
     );
+    //debugger
 
     return (
         <FocusContext.Provider value={focusKey}>
@@ -492,18 +483,20 @@ function Content() {
                         <div>Selected Item Text3</div>
                     </SelectedItemTitle>
                 </SelectedItemWrapper>
+
                 <ScrollingRows ref={ref}>
-                    {data.length > 0 ?
+                    {contentData[page].content.length > 0 ?
                         <div>
-                            {data.map((value, index, array) => (
+                            {contentData[page].content.map((value, index, array) => (
                                 <ContentRow
-                                    data={data[index].assets}
-                                    key={value.title}
-                                    title={value.title}
-                                    onAssetPress={onAssetPress}
-                                    onFocus={onRowFocus}
-                                />
+                                data={contentData[page].content[index].assets}
+                                key={index}
+                                title={value.title}
+                                onAssetPress={onAssetPress}
+                                onFocus={onRowFocus}
+                            />
                             ))}
+                            
                         </div> : <div></div>
                     }
                 </ScrollingRows>
@@ -518,6 +511,21 @@ export interface MainProps {
     app: App;
 }
 
+function DataContainer() {
+    const { isLoading, error, data, isFetching } = useQuery(["repoData"], () =>
+    axios
+      .get("https://stone-bronzed-river.glitch.me/data.json")
+      .then((res) => res.data)
+  );
+  if (isLoading) return <div>Loading...</div>
+
+    return <AppContainer>
+    <GlobalStyle />
+    <Menu focusKey='MENU' />
+    <Content data={data}/>
+</AppContainer>
+}
+
 interface MainState {
 }
 
@@ -528,14 +536,13 @@ export class Main extends Component<MainProps, MainState>
     }
 
     public render(): JSX.Element {
+
         return (
+            <QueryClientProvider client={queryClient}>
             <React.StrictMode>
-                <AppContainer>
-                    <GlobalStyle />
-                    <Menu focusKey='MENU' />
-                    <Content />
-                </AppContainer>
+                <DataContainer></DataContainer>
             </React.StrictMode>
+            </QueryClientProvider>
         );
     }
 }
