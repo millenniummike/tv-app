@@ -12,7 +12,7 @@ import {
     KeyPressDetails
 } from './index';
 
-import { FaAppStore } from 'react-icons/fa';
+import { FaAppStore, FaArtstation } from 'react-icons/fa';
 
 init({
     debug: false,
@@ -284,7 +284,7 @@ function MenuItem(props: any) {
     );
     const { ref, focused } = useFocusable({ onFocus: onMenuItemFocus });
 
-    return <MenuItemBox ref={ref} focused={focused}><FaAppStore /></MenuItemBox>;
+    return <MenuItemBox ref={ref} focused={focused}><FaArtstation /></MenuItemBox>;
 
     //return <MenuItemBox ref={ref} focused={focused}><MenuTitle>{props.title}</MenuTitle></MenuItemBox>;
 }
