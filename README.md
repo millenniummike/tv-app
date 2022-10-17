@@ -1,3 +1,8 @@
+# TV App using spatial navigation
+## Features
+- Uses spatial navigation from noorigin
+- Loads content using json from glitch
+
 ![logo](https://user-images.githubusercontent.com/6104940/107880275-b04f2b80-6ed5-11eb-9852-de05425070cc.png)
 
 # React TypeScript Webpack Starter
