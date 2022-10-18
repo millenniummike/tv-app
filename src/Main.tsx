@@ -79,6 +79,7 @@ interface AssetData {
     color: string;
     width: string;
     backgroundImage: string;
+    assets: [];
 }[];
 
 interface MenuItemBoxProps {
@@ -97,11 +98,6 @@ interface AssetProps {
     color: string;
     width: string;
     backgroundImage: string;
-    onClick: (
-        layout: FocusableComponentLayout,
-        props: object,
-        details: FocusDetails
-    ) => void;
     onEnterPress: (props: object, details: KeyPressDetails) => void;
     onFocus: (
         layout: FocusableComponentLayout,
@@ -133,6 +129,7 @@ interface ContentRowProps {
     ) => void;
 }
 
+
 const ContentWrapper = styled.div`
     flex: 1;
     overflow: hidden;
@@ -152,13 +149,13 @@ const ContentTitle = styled.div`
 const SelectedItemWrapper = styled.div`
     position: relative;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
   `;
 
 const SelectedItemBox = styled.div<SelectedItemBoxProps>`
     height: 482px;
-    width: 1200px;
+    width: 1074px;
     background-image: url('${({ backgroundImage }) => backgroundImage}');
     background-color: ${({ color }) => color};
     margin-bottom: 37px;
@@ -166,7 +163,7 @@ const SelectedItemBox = styled.div<SelectedItemBoxProps>`
   `;
 
 const SelectedItemTitle = styled.div`
-    width:600px;
+    position: absolute;
     bottom: 75px;
     left: 150px;
     color: white;
@@ -277,7 +274,7 @@ const AssetWrapper = styled.div`
 
 const AppContainer = styled.div`
   background-color: #221c35;
-  width: 1920px;
+  width: 1440px;
   height: 890px;
   display: flex;
   flex-direction: row;
@@ -292,21 +289,17 @@ const GlobalStyle = createGlobalStyle`
 function MenuItem(props: any) {
     const onMenuItemFocus = useCallback(
 
-        (loc: any, asset: any) => {
-            page=loc.y/130
-            
+        (x: any, asset: any) => {
+            console.log("Menu focused")
+            console.log(x)
+            console.log(asset) /// ****** WHY!?!?
         }, null
     );
     const { ref, focused } = useFocusable({ onFocus: onMenuItemFocus });
 
-    const handleButtonClick = (event : React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        console.log(event.target);
-        console.log(event.currentTarget);
-        alert(event.target)
-        page=1
-    }
+    return <MenuItemBox ref={ref} focused={focused}><FaAppStore /></MenuItemBox>;
 
-    return <div onClick={handleButtonClick} ref={ref}><FaArtstation /> <MenuTitle>{props.title}</MenuTitle></div>;
+    //return <MenuItemBox ref={ref} focused={focused}><MenuTitle>{props.title}</MenuTitle></MenuItemBox>;
 }
 
 function Menu({ focusKey: focusKeyParam }: MenuProps) {
@@ -393,17 +386,13 @@ function Asset({ title, color, width, backgroundImage, onEnterPress, onFocus }: 
             backgroundImage
         }
     });
-    
- 
-
 
     return (
-        <div><AssetWrapper ref={ref}>
+        <AssetWrapper ref={ref}>
             <AssetBox width={width} backgroundImage={backgroundImage} color={color} focused={focused}>
             </AssetBox>
             <AssetTitle>{title}</AssetTitle>
         </AssetWrapper>
-        </div>
     );
 }
 
@@ -420,10 +409,6 @@ function ContentRow({
     const scrollingRef = useRef(null);
     const [selectedAsset, setSelectedAsset] = useState(null);
 
-    const handleButtonClick = (event : React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-
- 
-    }
     const onAssetFocus = useCallback(
         ({ x }: { x: number }, asset: AssetProps) => {
             onAssetPress(asset, null)
@@ -444,16 +429,15 @@ function ContentRow({
                 <ContentRowScrollingWrapper ref={scrollingRef}>
                     <ContentRowScrollingContent>
                         {data.map(({ title, color, backgroundImage, width }) => (
-                            <div onClick={handleButtonClick}><Asset
+                            <Asset
                                 backgroundImage={backgroundImage}
                                 width={width}
                                 key={title}
                                 title={title}
                                 color={color}
-                                onClick={onAssetFocus}
                                 onEnterPress={onAssetPress}
                                 onFocus={onAssetFocus}
-                            /></div>
+                            />
                         ))}
                     </ContentRowScrollingContent>
                 </ContentRowScrollingWrapper>
@@ -463,12 +447,11 @@ function ContentRow({
 }
 
 function Content({data:data}) {
-    let contentData = data['pages']
-    //contentData = [{"content":[]}];
-    const { ref, focusKey } = useFocusable();
+    let contentData = data['pages'][page].page.content
 
+    const { ref, focusKey } = useFocusable();
     const [selectedAsset, setSelectedAsset] = useState(null);
-    //setSelectedAsset({"tite":"i"});
+
     const onAssetPress = useCallback((asset: AssetProps) => {
         setSelectedAsset(asset);
     }, []);
@@ -482,14 +465,17 @@ function Content({data:data}) {
         },
         [ref]
     );
-    //debugger
 
+    //debugger
     return (
         <FocusContext.Provider value={focusKey}>
             <ContentWrapper>
                 <ContentTitle>What to Watch?</ContentTitle>
                 <SelectedItemWrapper>
-                   
+                    <SelectedItemBox
+                        color={selectedAsset ? selectedAsset.color : '#565b6b'}
+                        backgroundImage={selectedAsset ? selectedAsset.backgroundImage : ''}
+                    />
                     <SelectedItemTitle>
                     {selectedAsset
                             ? <div>{selectedAsset.title}</div>
@@ -499,25 +485,19 @@ function Content({data:data}) {
                         <div>Selected Item Text2</div>
                         <div>Selected Item Text3</div>
                     </SelectedItemTitle>
-                     <SelectedItemBox
-                        color={selectedAsset ? selectedAsset.color : '#565b6b'}
-                        backgroundImage={selectedAsset ? selectedAsset.backgroundImage : ''}
-                    />
                 </SelectedItemWrapper>
-
                 <ScrollingRows ref={ref}>
-                    {contentData[page].content.length > 0 ?
+                    {contentData.length > 0 ?
                         <div>
-                            {contentData[page].content.map((value, index, array) => (
+                            {contentData.map((value, index, array) => (
                                 <ContentRow
-                                data={contentData[page].content[index].assets}
-                                key={index}
-                                title={value.title}
-                                onAssetPress={onAssetPress}
-                                onFocus={onRowFocus}
-                            />
+                                    data={value.assets}
+                                    key={value.title}
+                                    title={value.title}
+                                    onAssetPress={onAssetPress}
+                                    onFocus={onRowFocus}
+                                />
                             ))}
-                            
                         </div> : <div></div>
                     }
                 </ScrollingRows>
@@ -557,7 +537,6 @@ export class Main extends Component<MainProps, MainState>
     }
 
     public render(): JSX.Element {
-
         return (
             <QueryClientProvider client={queryClient}>
             <React.StrictMode>
