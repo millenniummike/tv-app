@@ -25,7 +25,7 @@ import {
   const queryClient = new QueryClient()
 
 init({
-    debug: false,
+    debug: true,
     visualDebug: false
   });
 
@@ -97,6 +97,11 @@ interface AssetProps {
     color: string;
     width: string;
     backgroundImage: string;
+    onClick: (
+        layout: FocusableComponentLayout,
+        props: object,
+        details: FocusDetails
+    ) => void;
     onEnterPress: (props: object, details: KeyPressDetails) => void;
     onFocus: (
         layout: FocusableComponentLayout,
@@ -128,7 +133,6 @@ interface ContentRowProps {
     ) => void;
 }
 
-
 const ContentWrapper = styled.div`
     flex: 1;
     overflow: hidden;
@@ -148,13 +152,13 @@ const ContentTitle = styled.div`
 const SelectedItemWrapper = styled.div`
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
   `;
 
 const SelectedItemBox = styled.div<SelectedItemBoxProps>`
     height: 482px;
-    width: 1074px;
+    width: 1200px;
     background-image: url('${({ backgroundImage }) => backgroundImage}');
     background-color: ${({ color }) => color};
     margin-bottom: 37px;
@@ -162,7 +166,7 @@ const SelectedItemBox = styled.div<SelectedItemBoxProps>`
   `;
 
 const SelectedItemTitle = styled.div`
-    position: absolute;
+    width:600px;
     bottom: 75px;
     left: 150px;
     color: white;
@@ -273,7 +277,7 @@ const AssetWrapper = styled.div`
 
 const AppContainer = styled.div`
   background-color: #221c35;
-  width: 100%;
+  width: 1920px;
   height: 890px;
   display: flex;
   flex-direction: row;
@@ -295,7 +299,14 @@ function MenuItem(props: any) {
     );
     const { ref, focused } = useFocusable({ onFocus: onMenuItemFocus });
 
-    return <MenuItemBox ref={ref} focused={focused}><FaArtstation /> <MenuTitle>{props.title}</MenuTitle></MenuItemBox>;
+    const handleButtonClick = (event : React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        console.log(event.target);
+        console.log(event.currentTarget);
+        alert(event.target)
+        page=1
+    }
+
+    return <div onClick={handleButtonClick} ref={ref}><FaArtstation /> <MenuTitle>{props.title}</MenuTitle></div>;
 }
 
 function Menu({ focusKey: focusKeyParam }: MenuProps) {
@@ -382,13 +393,17 @@ function Asset({ title, color, width, backgroundImage, onEnterPress, onFocus }: 
             backgroundImage
         }
     });
+    
+ 
+
 
     return (
-        <AssetWrapper ref={ref}>
+        <div><AssetWrapper ref={ref}>
             <AssetBox width={width} backgroundImage={backgroundImage} color={color} focused={focused}>
             </AssetBox>
             <AssetTitle>{title}</AssetTitle>
         </AssetWrapper>
+        </div>
     );
 }
 
@@ -405,6 +420,10 @@ function ContentRow({
     const scrollingRef = useRef(null);
     const [selectedAsset, setSelectedAsset] = useState(null);
 
+    const handleButtonClick = (event : React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+
+ 
+    }
     const onAssetFocus = useCallback(
         ({ x }: { x: number }, asset: AssetProps) => {
             onAssetPress(asset, null)
@@ -425,15 +444,16 @@ function ContentRow({
                 <ContentRowScrollingWrapper ref={scrollingRef}>
                     <ContentRowScrollingContent>
                         {data.map(({ title, color, backgroundImage, width }) => (
-                            <Asset
+                            <div onClick={handleButtonClick}><Asset
                                 backgroundImage={backgroundImage}
                                 width={width}
                                 key={title}
                                 title={title}
                                 color={color}
+                                onClick={onAssetFocus}
                                 onEnterPress={onAssetPress}
                                 onFocus={onAssetFocus}
-                            />
+                            /></div>
                         ))}
                     </ContentRowScrollingContent>
                 </ContentRowScrollingWrapper>
@@ -448,7 +468,7 @@ function Content({data:data}) {
     const { ref, focusKey } = useFocusable();
 
     const [selectedAsset, setSelectedAsset] = useState(null);
-
+    //setSelectedAsset({"tite":"i"});
     const onAssetPress = useCallback((asset: AssetProps) => {
         setSelectedAsset(asset);
     }, []);
@@ -469,10 +489,7 @@ function Content({data:data}) {
             <ContentWrapper>
                 <ContentTitle>What to Watch?</ContentTitle>
                 <SelectedItemWrapper>
-                    <SelectedItemBox
-                        color={selectedAsset ? selectedAsset.color : '#565b6b'}
-                        backgroundImage={selectedAsset ? selectedAsset.backgroundImage : ''}
-                    />
+                   
                     <SelectedItemTitle>
                     {selectedAsset
                             ? <div>{selectedAsset.title}</div>
@@ -482,6 +499,10 @@ function Content({data:data}) {
                         <div>Selected Item Text2</div>
                         <div>Selected Item Text3</div>
                     </SelectedItemTitle>
+                     <SelectedItemBox
+                        color={selectedAsset ? selectedAsset.color : '#565b6b'}
+                        backgroundImage={selectedAsset ? selectedAsset.backgroundImage : ''}
+                    />
                 </SelectedItemWrapper>
 
                 <ScrollingRows ref={ref}>
@@ -540,9 +561,45 @@ export class Main extends Component<MainProps, MainState>
         return (
             <QueryClientProvider client={queryClient}>
             <React.StrictMode>
+                <ErrorBoundary>
                 <DataContainer></DataContainer>
+                </ErrorBoundary>
             </React.StrictMode>
             </QueryClientProvider>
         );
     }
+}
+
+import { ErrorInfo, ReactNode } from "react";
+
+interface Props {
+  children?: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false
+  };
+
+  public static getDerivedStateFromError(_: Error): State {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true };
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Uncaught error:", error, errorInfo);
+    alert(error)
+  }
+
+  public render() {
+    if (this.state.hasError) {
+      return <h1>Sorry.. there was an error</h1>;
+    }
+
+    return this.props.children;
+  }
 }
