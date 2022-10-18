@@ -106,7 +106,7 @@
   `,be=n.ZP.div`
   background-color: #221c35;
   width: 1920px;
-  height: 890px;
+  height: 1080px;
   display: flex;
   flex-direction: row;
 `,me=n.vJ`
