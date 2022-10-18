@@ -11,10 +11,6 @@ interface MenuWrapperProps {
     hasFocusedChild: boolean;
 }
 
-interface SelectedItemBoxProps {
-    backgroundImage: string;
-}
-
 interface MenuProps {
     focusKey: string;
 }
@@ -60,16 +56,16 @@ function MenuItem(props: any) {
     const onMenuItemFocus = useCallback(
 
         (x: any, asset: any) => {
-            console.log("Menu focused")
-            console.log(x)
-            console.log(asset) /// ****** WHY!?!?
+
         }, null
     );
-    const { ref, focused } = useFocusable({ onFocus: onMenuItemFocus });
+    const onMenuPress = useCallback((asset: [MenuProps]) => {
+        alert("press menu")
+    }, []);
+
+    const { ref, focused } = useFocusable({ onFocus: onMenuItemFocus, onEnterPress: onMenuPress,});
 
     return <MenuItemBox ref={ref} focused={focused}><FaArtstation /></MenuItemBox>;
-
-    //return <MenuItemBox ref={ref} focused={focused}><MenuTitle>{props.title}</MenuTitle></MenuItemBox>;
 }
 
 export function Menu({ focusKey: focusKeyParam }: MenuProps) {
@@ -113,10 +109,7 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
             try {
                 const response = await fetch(url);
                 const json = await response.json();
-                console.log("**********")
-                console.log(json);
                 setData(json);
-
             } catch (error) {
                 console.log('error', error);
             }
@@ -134,8 +127,8 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
                         <div>
                             {data.map((value, index, array) => (
                                 hasFocusedChild ? 
-                                <MenuItem menuFocus={hasFocusedChild} title={value.title} /> :
-                                <MenuItem menuFocus={hasFocusedChild} title={value.title} />
+                                <MenuItem key={value.title} menuFocus={hasFocusedChild} title={value.title} /> :
+                                <MenuItem key={value.title} menuFocus={hasFocusedChild} title={value.title} />
                             ))}
                         </div> : <div></div>
                     }

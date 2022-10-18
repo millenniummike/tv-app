@@ -3,6 +3,7 @@ import React, { Component, useCallback, useEffect, useState, useRef } from 'reac
 import ReactDOMClient from 'react-dom/client';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Menu } from "./Menu";
+import { SelectedContent } from "./SelectedContent";
 import styled, { createGlobalStyle } from 'styled-components';
 import {
     useFocusable,
@@ -66,8 +67,6 @@ const assetDataJson = {
 }
 
 const assets = assetDataJson.base
-
-//
 
 interface AssetData {
     title: string;
@@ -303,11 +302,11 @@ function ContentRow({
                 <ContentRowTitle>{rowTitle}</ContentRowTitle>
                 <ContentRowScrollingWrapper ref={scrollingRef}>
                     <ContentRowScrollingContent>
-                        {data.map(({ title, color, backgroundImage, width }) => (
+                        {data.map(({ title, color, backgroundImage, width },index) => (
                             <Asset
                                 backgroundImage={backgroundImage}
                                 width={width}
-                                key={title}
+                                key={title+index}
                                 title={title}
                                 color={color}
                                 onEnterPress={onAssetPress}
@@ -325,7 +324,11 @@ function Content({data:data}) {
     let contentData = data['pages'][page].page.content
 
     const { ref, focusKey } = useFocusable();
-    const [selectedAsset, setSelectedAsset] = useState(null);
+    const defaultAssetSelected = {
+        "title":"Default title",
+        "backgroundImage":"https://walter.trakt.tv/images/shows/000/154/574/fanarts/thumb/e76ff4eec3.jpg.webp"
+    }
+    const [selectedAsset, setSelectedAsset] = useState(defaultAssetSelected);
 
     const onAssetPress = useCallback((asset: AssetProps) => {
         setSelectedAsset(asset);
@@ -341,33 +344,17 @@ function Content({data:data}) {
         [ref]
     );
 
-    //debugger
     return (
         <FocusContext.Provider value={focusKey}>
             <ContentWrapper>
-                <SelectedItemWrapper>
-                    <SelectedItemBox
-                        color={selectedAsset ? selectedAsset.color : '#565b6b'}
-                        backgroundImage={selectedAsset ? selectedAsset.backgroundImage : ''}
-                    />
-                    <SelectedItemTitle>
-                    {selectedAsset
-                            ? <div>{selectedAsset.title}</div>
-                            : <div></div>
-                        }
-                        <SelectedItemText>
-                            Some text
-                        </SelectedItemText>
-                        
-                    </SelectedItemTitle>
-                </SelectedItemWrapper>
+                {selectedAsset ? <SelectedContent description={'TO add dynamic descrption'} backgroundImage={selectedAsset.backgroundImage} title={selectedAsset.title} color={''} width={''}></SelectedContent>:<SelectedContent description={''} backgroundImage={''} title={''} color={''} width={''}></SelectedContent>}
                 <ScrollingRows ref={ref}>
                     {contentData.length > 0 ?
                         <div>
                             {contentData.map((value, index, array) => (
                                 <ContentRow
                                     data={value.assets}
-                                    key={value.title}
+                                    key={value.title+index}
                                     title={value.title}
                                     onAssetPress={onAssetPress}
                                     onFocus={onRowFocus}
