@@ -155,7 +155,8 @@ const SelectedItemWrapper = styled.div`
 
 const SelectedItemBox = styled.div<SelectedItemBoxProps>`
     height: 482px;
-    width: 1074px;
+    margin-left: 786px;
+    width: 852px;
     background-image: url('${({ backgroundImage }) => backgroundImage}');
     background-color: ${({ color }) => color};
     margin-bottom: 37px;
@@ -164,10 +165,21 @@ const SelectedItemBox = styled.div<SelectedItemBoxProps>`
 
 const SelectedItemTitle = styled.div`
     position: absolute;
-    bottom: 75px;
-    left: 150px;
+    padding:8px;
+    left: 32px;
+    top:64px;
     color: white;
-    font-size: 27px;
+    font-size: 34px;
+    font-weight: 400;
+    font-family: 'Arial';
+  `;
+
+  const SelectedItemText= styled.div`
+    position: absolute;
+    padding:8px;
+    left: 0px;
+    color: white;
+    font-size: 20px;
     font-weight: 400;
     font-family: 'Arial';
   `;
@@ -181,23 +193,25 @@ const ScrollingRows = styled.div`
 
 const MenuItemBox = styled.div<MenuItemBoxProps>`
     width: 64px;
+    margin:16px;
+    margin-bottom:32px;
     padding: 8px;
-    background-color: ${({ focused }) => (focused ? '#50F050' : '#0056ed')};
     border-color: white;
-    border-style: solid;
-    box-sizing: border-box;
+    background-color: ${({ focused }) =>
+        focused ? '#0e4181' : '#4e4181'};
     border-radius: 7px;
   `;
 
 const MenuWrapper = styled.div<MenuWrapperProps>`
     flex: 1;
+    margin:12px;
     max-width: ${({ hasFocusedChild }) =>
     hasFocusedChild ? '110px' : '110px'};
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: ${({ hasFocusedChild }) =>
-        hasFocusedChild ? '#4e4181' : '#362C56'};
+        hasFocusedChild ? '#262626' : '#262626'};
     padding-top: 37px;
     position:relative;
     height:1200px;
@@ -211,6 +225,7 @@ const ContentRowWrapper = styled.div`
 const ContentRowTitle = styled.div`
     color: white;
     margin-bottom: 22px;
+    text-align: left;
     font-size: 27px;
     font-weight: 700;
     font-family: 'Arial';
@@ -470,7 +485,6 @@ function Content({data:data}) {
     return (
         <FocusContext.Provider value={focusKey}>
             <ContentWrapper>
-                <ContentTitle>What to Watch?</ContentTitle>
                 <SelectedItemWrapper>
                     <SelectedItemBox
                         color={selectedAsset ? selectedAsset.color : '#565b6b'}
@@ -481,9 +495,10 @@ function Content({data:data}) {
                             ? <div>{selectedAsset.title}</div>
                             : <div></div>
                         }
-                        <div>Selected Item Text1</div>
-                        <div>Selected Item Text2</div>
-                        <div>Selected Item Text3</div>
+                        <SelectedItemText>
+                            Some text
+                        </SelectedItemText>
+                        
                     </SelectedItemTitle>
                 </SelectedItemWrapper>
                 <ScrollingRows ref={ref}>
