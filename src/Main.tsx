@@ -274,7 +274,7 @@ const AssetWrapper = styled.div`
 
 const AppContainer = styled.div`
   background-color: #221c35;
-  width: 1440px;
+  width: 1920px;
   height: 890px;
   display: flex;
   flex-direction: row;
