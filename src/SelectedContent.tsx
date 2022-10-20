@@ -40,7 +40,7 @@ const SelectedItemTitle = styled.div`
     left: 56px;
     top:64px;
     color: white;
-    font-size: 34px;
+    font-size: 78px;
     font-weight: 400;
     font-family: 'Arial';
   `;
@@ -48,11 +48,13 @@ const SelectedItemTitle = styled.div`
   const SelectedItemText= styled.div`
     position: absolute;
     padding:8px;
+    text-align:left;
     left: 0px;
     color: white;
-    font-size: 20px;
+    font-size: 50px;
     font-weight: 400;
     font-family: 'Arial';
+
   `;
 
 export const SelectedContent = ({color,backgroundImage,title,description} : AssetProps) => {

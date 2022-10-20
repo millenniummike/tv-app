@@ -15,13 +15,15 @@ const DIRECTION_RIGHT = 'right';
 const DIRECTION_UP = 'up';
 const DIRECTION_DOWN = 'down';
 const KEY_ENTER = 'enter';
+const KEY_BACK = 'back';
 
 const DEFAULT_KEY_MAP = {
   [DIRECTION_LEFT]: [37],
   [DIRECTION_UP]: [38],
   [DIRECTION_RIGHT]: [39],
   [DIRECTION_DOWN]: [40],
-  [KEY_ENTER]: [13]
+  [KEY_ENTER]: [13],
+  [KEY_BACK]: [8]
 };
 
 export const ROOT_FOCUS_KEY = 'SN:ROOT';
@@ -641,6 +643,13 @@ class SpatialNavigationService {
           pressedKeys: this.pressedKeys
         };
 
+        if (eventType === KEY_BACK && this.focusKey) {
+          this.onBackPress(keysDetails);
+
+          return;
+        }
+        
+
         if (eventType === KEY_ENTER && this.focusKey) {
           this.onEnterPress(keysDetails);
 
@@ -706,6 +715,10 @@ class SpatialNavigationService {
         this.keyUpEventListener = null;
       }
     }
+  }
+
+  onBackPress(keysDetails: KeyPressDetails) {
+    this.log('onBackPress', '')
   }
 
   onEnterPress(keysDetails: KeyPressDetails) {

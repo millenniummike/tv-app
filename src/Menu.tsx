@@ -1,11 +1,24 @@
 import styled from 'styled-components';
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, createContext, useContext } from 'react';
 import {
     useFocusable,
     FocusContext
 } from './index';
 
-import { FaAppStore, FaArtstation } from 'react-icons/fa';
+import { Context } from './Context'
+
+import * as FontAwesome from "react-icons/fa";
+
+const Icon = props => {
+  const { iconName, size, color } = props;
+  const icon = React.createElement(FontAwesome[iconName]);
+  return <div style={{ fontSize: size, color: color }}>{icon}</div>;
+};
+
+const menuData = [
+    {"title":"Menu1"},
+    {"title":"Menu2"}
+]
 
 interface MenuWrapperProps {
     hasFocusedChild: boolean;
@@ -13,6 +26,12 @@ interface MenuWrapperProps {
 
 interface MenuProps {
     focusKey: string;
+}
+
+interface MenuItemProps {
+    menuFocus: boolean;
+    title: string;
+    key:number;
 }
 
 interface MenuItemBoxProps {
@@ -26,14 +45,14 @@ const NmLogo = styled.img`
   `;
 
 const MenuItemBox = styled.div<MenuItemBoxProps>`
-    width: 32px;
-    height: 32px;
+    width: 64px;
+    height: 64px;
     margin:16px;
-    margin-bottom:32px;
+    margin-bottom:8px;
     padding: 8px;
     border-color: white;
     background-color: ${({ focused }) =>
-        focused ? '#0e4181' : '#4e4181'};
+        focused ? '#0e4181' : '#000000'};
     border-radius: 7px;
   `;
 
@@ -41,7 +60,7 @@ const MenuWrapper = styled.div<MenuWrapperProps>`
     flex: 1;
     margin:12px;
     max-width: ${({ hasFocusedChild }) =>
-    hasFocusedChild ? '110px' : '110px'};
+    hasFocusedChild ? '140px' : '140px'};
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,20 +71,31 @@ const MenuWrapper = styled.div<MenuWrapperProps>`
     height:1200px;
   `;
 
-function MenuItem(props: any) {
+function MenuItem(props:any) {
+
+    const { setPage } = useContext(Context)
     const onMenuItemFocus = useCallback(
 
-        (x: any, asset: any) => {
-
+        (layout: any) => {
+            
         }, null
     );
-    const onMenuPress = useCallback((asset: [MenuProps]) => {
-        alert("press menu")
-    }, []);
 
-    const { ref, focused } = useFocusable({ onFocus: onMenuItemFocus, onEnterPress: onMenuPress,});
+    const onMenuPress = useCallback(
+        ( props: any) => {
+            setPage(props.index)
+        }, null
+    );
 
-    return <MenuItemBox ref={ref} focused={focused}><FaArtstation /></MenuItemBox>;
+        //debugger
+    const { ref, focused} = useFocusable({ onFocus: onMenuItemFocus, onEnterPress: onMenuPress,
+        extraProps: {
+            index:props.index
+        }});
+
+    return <div><MenuItemBox ref={ref} focused={focused}>
+         <Icon iconName={props.icon} size={64} color="white" />
+         </MenuItemBox> {props.title}</div>;
 }
 
 export function Menu({ focusKey: focusKeyParam }: MenuProps) {
@@ -73,8 +103,8 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
         ref,
         focusSelf,
         hasFocusedChild,
-        focusKey
-        // setFocus, -- to set focus manually to some focusKey
+        focusKey,
+        setFocus,
         // navigateByDirection, -- to manually navigate by direction
         // pause, -- to pause all navigation events
         // resume, -- to resume all navigation events
@@ -82,7 +112,7 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
         // getCurrentFocusKey -- to get the current focus key
     } = useFocusable({
         focusable: true,
-        saveLastFocusedChild: false,
+        saveLastFocusedChild: true,
         trackChildren: true,
         autoRestoreFocus: true,
         isFocusBoundary: false,
@@ -92,13 +122,14 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
         onEnterRelease: () => { },
         onArrowPress: () => true,
         onFocus: () => { },
-        onBlur: () => { },
-        extraProps: { foo: 'bar' }
+        onBlur: () => { }
     });
 
+    //** TODO work out fixed menu focus key */
     useEffect(() => {
-        focusSelf();
-    }, [focusSelf]);
+        setFocus("sn:focusable-item-50");
+    }, [setFocus]);
+    
 
     const [data, setData] = useState([]);
 
@@ -112,6 +143,7 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
                 setData(json);
             } catch (error) {
                 console.log('error', error);
+                setData(menuData)
             }
         };
 
@@ -127,8 +159,8 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
                         <div>
                             {data.map((value, index, array) => (
                                 hasFocusedChild ? 
-                                <MenuItem key={value.title} menuFocus={hasFocusedChild} title={value.title} /> :
-                                <MenuItem key={value.title} menuFocus={hasFocusedChild} title={value.title} />
+                                <MenuItem icon={value.icon} key={index} index={index} menuFocus={hasFocusedChild} title={value.title} /> :
+                                <MenuItem icon={value.icon} key={index} index={index} menuFocus={hasFocusedChild} title={''} />
                             ))}
                         </div> : <div></div>
                     }
