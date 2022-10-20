@@ -719,6 +719,7 @@ class SpatialNavigationService {
 
   onBackPress(keysDetails: KeyPressDetails) {
     this.log('onBackPress', '')
+    window.location.reload();
   }
 
   onEnterPress(keysDetails: KeyPressDetails) {

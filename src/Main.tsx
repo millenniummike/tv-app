@@ -189,9 +189,16 @@ class ErrorBoundary extends Component<Props, State> {
         alert(error)
     }
 
+    public reload(){
+        window.location.reload();
+    }
+
+
     public render() {
         if (this.state.hasError) {
-            return <h1>Sorry.. there was an error</h1>;
+            return <div><h1>Sorry.. there was an error</h1>
+            <button onClick={this.reload}>Refresh Page</button>
+            </div>;
         }
 
         return this.props.children;
