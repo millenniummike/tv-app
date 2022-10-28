@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import React, { useCallback, useState, useRef } from 'react';
 import {
     useFocusable,
@@ -82,6 +82,17 @@ const ContentRowScrollingContent = styled.div`
     flex-direction: row;
  `;
 
+ const fadeIn = keyframes`
+ 0% { opacity: 1}
+ 20% { opacity: 0}
+ 100% { opacity: 1; }
+`
+const fadeOut = keyframes`
+0% { opacity: 1}
+20% { opacity: 0}
+100% { opacity: 1; }
+`
+
 const AssetBox = styled.div<AssetBoxProps>`
     width: ${({ width }) => width};
     height: ${({ height }) => height};
@@ -93,6 +104,9 @@ const AssetBox = styled.div<AssetBoxProps>`
     border-width: ${({ focused }) => (focused ? '6px' : '6px')};
     box-sizing: border-box;
     border-radius: 7px;
+    animation-name: ${({ focused }) => (focused ? fadeIn: fadeOut)};
+    animation-duration: 2s;
+    animation-iteration-count: 1;
 `;
 
 const AssetTitle = styled.div`
@@ -112,6 +126,7 @@ const AssetWrapper = styled.div`
   `;
 
 
+
   function Asset({ title, color, width, height, backgroundImage, description, onEnterPress, onFocus }: AssetProps) {
     const { ref, focused } = useFocusable({
         onEnterPress,
@@ -123,7 +138,6 @@ const AssetWrapper = styled.div`
             description
         }
     });
-
     return (
         <AssetWrapper ref={ref}>
            
