@@ -83,6 +83,7 @@ function MenuItem(props:any) {
 
     const onMenuPress = useCallback(
         ( props: any) => {
+            debugger
             setPage(props.index)
         }, null
     );
@@ -128,7 +129,7 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
     //** TODO work out fixed menu focus key */
     useEffect(() => {
         focusSelf();
-        //setFocus("sn:focusable-item-50");
+        //setFocus("sn:focusable-item-6");
     }, [focusSelf]);
     
 

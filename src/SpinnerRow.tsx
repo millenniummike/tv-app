@@ -59,14 +59,14 @@ const ContentRowWrapper = styled.div`
     margin-bottom: 37px;
   `;
 
-const ContentRowTitle = styled.div`
+const AssetText = styled.div`
     color: white;
+    margin:8px;
     margin-bottom: 22px;
     text-align: left;
-    font-size: 27px;
+    font-size: 38px;
     font-weight: 700;
     font-family: 'Arial';
-    padding-left: 60px;
   `;
 
 const ContentRowScrollingWrapper = styled.div`
@@ -97,10 +97,12 @@ const AssetBox = styled.div<AssetBoxProps>`
 
 const AssetTitle = styled.div`
     color: white;
+    margin:8px;
     margin-top: 10px;
     font-family: 'Arial';
-    font-size: 24px;
+    font-size: 36px;
     font-weight: 400;
+    text-align:left;
   `;
 
 const AssetWrapper = styled.div`
@@ -124,14 +126,16 @@ const AssetWrapper = styled.div`
 
     return (
         <AssetWrapper ref={ref}>
+           
             <AssetBox width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
+            <AssetTitle>Asset Title</AssetTitle>
+            <AssetText>Asset text</AssetText>
             </AssetBox>
-            <AssetTitle>{title}</AssetTitle>
         </AssetWrapper>
     );
 }
 
-export function ContentRow({
+export function SpinnerRow({
     description: description,
     data: data,
     title: rowTitle,
@@ -159,18 +163,17 @@ export function ContentRow({
     return (
         <FocusContext.Provider value={focusKey}>
             <ContentRowWrapper ref={ref}>
-                <ContentRowTitle>{rowTitle}</ContentRowTitle>
                 <ContentRowScrollingWrapper ref={scrollingRef}>
                     <ContentRowScrollingContent>
                         {data.map(({ title, description, color, backgroundImage, width},index) => (
-                            <Asset
-                                backgroundImage={backgroundImage}
+                           <Asset
+                                backgroundImage={height=="200px"?"":backgroundImage}
                                 description={description}
                                 height={height}
                                 width={width}
                                 key={title+index}
                                 title={title}
-                                color={color}
+                                color={height=="200px"?"":color}
                                 onEnterPress={onAssetPress}
                                 onFocus={onAssetFocus}
                             />

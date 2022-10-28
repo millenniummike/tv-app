@@ -108,6 +108,14 @@ const AppContainer = styled.div`
   flex-direction: row;
 `;
 
+const ContentContainer = styled.div`
+  background-color: #000000;
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  flex-direction: column;
+`;
+
 const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar {
     display: none;
@@ -133,12 +141,16 @@ function DataContainer() {
     if (isLoading) return <div>Loading...</div>
     const showMenu = true;
 
-    return <Context.Provider value={{ page, setPage, showContent, setShowContent }}><AppContainer>
+    return <Context.Provider value={{ page, setPage, showContent, setShowContent }}>
+    <AppContainer>
         <GlobalStyle />
         {showMenu ? <Menu focusKey='MENU' />:null}
+        <ContentContainer>
         <Content page={page} data={data} />
+        </ContentContainer>
         
     </AppContainer>
+
     </Context.Provider>
 }
 

@@ -1181,7 +1181,6 @@ class SpatialNavigationService {
 
   getNodeLayoutByFocusKey(focusKey: string) {
     const component = this.focusableComponents[focusKey];
-
     if (component) {
       this.updateLayout(component.focusKey);
 

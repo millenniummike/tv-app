@@ -8,6 +8,7 @@ import {
     KeyPressDetails
 } from './index';
 import { ContentRow } from "./ContentRow";
+import { SpinnerRow } from "./SpinnerRow";
 import { SelectedContent } from "./SelectedContent";
 
 import { Context } from './Context'
@@ -27,6 +28,14 @@ interface AssetProps {
     ) => void;
 }
 
+const HiddenWrapper = styled.div`
+
+`;
+
+const NormalWrapper = styled.div`
+
+`;
+
 const ContentWrapper = styled.div`
     flex: 1;
     overflow: hidden;
@@ -45,10 +54,12 @@ const ScrollingRows = styled.div`
 export function Content(props: any) {
 
     let contentData = []
+    let spinnerData = []
     
     if (props.data)
     {
-        contentData=props.data['pages'][props.page].page.content
+        contentData=props.data['pages'][0].page.content
+        spinnerData=props.data['spinner'][0].page.content
     } else {
         
     }
@@ -62,7 +73,7 @@ export function Content(props: any) {
         "backgroundImage":"https://walter.trakt.tv/images/shows/000/154/574/fanarts/thumb/e76ff4eec3.jpg.webp",
         "description":"A really exciting description for this."
     }
-    const [selectedAsset, setSelectedAsset] = useState(defaultAssetSelected);
+    const [selectedAsset, setSelectedAsset] = useState(null);
 
     const onAssetPress = useCallback((asset: AssetProps) => {
         setShowContent(true);
@@ -70,6 +81,10 @@ export function Content(props: any) {
 
     const onSelectAsset = useCallback((asset: AssetProps) => {
         setSelectedAsset(asset);
+    }, []);
+
+    const onSelectSpinnerAsset = useCallback((asset: AssetProps) => {
+        setSelectedAsset(null)
     }, []);
 
     const onRowFocus = useCallback(
@@ -85,14 +100,27 @@ export function Content(props: any) {
     return (
         <FocusContext.Provider value={focusKey}>
             <ContentWrapper>
-                {selectedAsset ? <SelectedContent description={selectedAsset.description} backgroundImage={selectedAsset.backgroundImage} title={selectedAsset.title} color={''} width={''}></SelectedContent>:
-                <SelectedContent description={''} backgroundImage={''} title={''} color={''} width={''}></SelectedContent>}
+
+                {selectedAsset ? <SelectedContent description={selectedAsset.description} backgroundImage={selectedAsset.backgroundImage} title={selectedAsset.title} color={''} width={''}></SelectedContent>:<div></div>}
                 
                 <ScrollingRows ref={ref}>
                     {contentData.length > 0 ?
                         <div>
+                            {spinnerData.map((value, index, array) => (
+                                <SpinnerRow
+                                    data={value.assets}
+                                    height={selectedAsset ? "200px":"600px"}
+                                    key={value.title+index}
+                                    title={value.title}
+                                    description={value.description}
+                                    onAssetPress={onAssetPress}
+                                    onSelectAsset={onSelectSpinnerAsset}
+                                    onFocus={onRowFocus}
+                                />
+                            ))}
                             {contentData.map((value, index, array) => (
                                 <ContentRow
+                                    height={"200px"}
                                     data={value.assets}
                                     key={value.title+index}
                                     title={value.title}
