@@ -51,7 +51,7 @@ const SelectedItemTitle = styled.div`
     text-align:left;
     left: 0px;
     color: white;
-    font-size: 50px;
+    font-size: 32px;
     font-weight: 400;
     font-family: 'Arial';
 
