@@ -17,7 +17,7 @@ import { Context } from './Context'
 const queryClient = new QueryClient()
 
 init({
-    debug: true,
+    debug: false,
     visualDebug: false
 });
 
@@ -187,6 +187,7 @@ class ErrorBoundary extends Component<Props, State> {
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error("Uncaught error:", error, errorInfo);
         alert(error)
+        window.location.reload();
     }
 
     public reload(){

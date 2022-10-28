@@ -25,6 +25,7 @@ const DEFAULT_KEY_MAP = {
   [KEY_ENTER]: [13],
   [KEY_BACK]: [8]
 };
+// return on remote is 10009
 
 export const ROOT_FOCUS_KEY = 'SN:ROOT';
 

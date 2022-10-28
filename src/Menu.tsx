@@ -127,8 +127,9 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
 
     //** TODO work out fixed menu focus key */
     useEffect(() => {
-        setFocus("sn:focusable-item-50");
-    }, [setFocus]);
+        focusSelf();
+        //setFocus("sn:focusable-item-50");
+    }, [focusSelf]);
     
 
     const [data, setData] = useState([]);
