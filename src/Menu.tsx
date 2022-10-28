@@ -83,8 +83,8 @@ function MenuItem(props:any) {
 
     const onMenuPress = useCallback(
         ( props: any) => {
-            debugger
-            setPage(props.index)
+            alert('menu press')
+            //setPage(props.index)
         }, null
     );
 
