@@ -34,8 +34,20 @@ const SelectedItemBox = styled.div<SelectedItemBoxProps>`
     border-radius: 7px;
   `;
 
+const SelectedItemCard = styled.div`
+    position:absolute;
+    text-align:left;
+    padding:8px;
+    left: 56px;
+    top:64px;
+    color: white;
+    font-size: 78px;
+    font-weight: 400;
+    font-family: 'Arial';
+  `;
+
 const SelectedItemTitle = styled.div`
-    position: absolute;
+    text-align:left;
     padding:8px;
     left: 56px;
     top:64px;
@@ -46,7 +58,7 @@ const SelectedItemTitle = styled.div`
   `;
 
   const SelectedItemText= styled.div`
-    position: absolute;
+    width:750px;
     padding:8px;
     text-align:left;
     left: 0px;
@@ -54,7 +66,17 @@ const SelectedItemTitle = styled.div`
     font-size: 32px;
     font-weight: 400;
     font-family: 'Arial';
+  `;
 
+  const SelectedItemSubText= styled.div`
+    width:750px;
+    padding:8px;
+    text-align:left;
+    left: 0px;
+    color: grey;
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Arial';
   `;
 
 export const SelectedContent = ({color,backgroundImage,title,description} : AssetProps) => {
@@ -63,11 +85,16 @@ export const SelectedContent = ({color,backgroundImage,title,description} : Asse
         color={color ? 'red' : '#565b6b'}
         backgroundImage={backgroundImage ? backgroundImage : ''}
     />
+    <SelectedItemCard>
     <SelectedItemTitle>
     {title ? title:"Default selected title"}
         <SelectedItemText>
         {description ? description:"Default selected title"}
         </SelectedItemText>
+        <SelectedItemSubText>
+        "2nd item of text"
+        </SelectedItemSubText>
     </SelectedItemTitle>
+    </SelectedItemCard>
 </SelectedItemWrapper>
 }
