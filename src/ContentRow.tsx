@@ -66,7 +66,7 @@ const ContentRowTitle = styled.div`
     font-size: 27px;
     font-weight: 700;
     font-family: 'Arial';
-    padding-left: 60px;
+    padding-left: 120px;
   `;
 
 const ContentRowScrollingWrapper = styled.div`
@@ -74,7 +74,7 @@ const ContentRowScrollingWrapper = styled.div`
     overflow-y: hidden;
     flex-shrink: 1;
     flex-grow: 1;
-    padding-left: 0px;
+    padding-left: 120px;
   `;
 
 const ContentRowScrollingContent = styled.div`

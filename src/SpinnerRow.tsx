@@ -63,6 +63,7 @@ const AssetText = styled.div`
     color: white;
     margin:8px;
     margin-bottom: 22px;
+    margin-left: 120px;
     text-align: left;
     font-size: 38px;
     font-weight: 700;
@@ -121,6 +122,7 @@ const AssetTitle = styled.div`
     color: white;
     margin:8px;
     margin-top: 10px;
+    margin-left: 120px;
     font-family: 'Arial';
     font-size: 36px;
     font-weight: 400;

@@ -228,7 +228,7 @@ class SpatialNavigationService {
     const itemHeight = layout.height;
 
     const coordinate = isVertical ? itemY : itemX;
-    const itemSize = isVertical ? itemHeight : itemWidth;
+    const itemSize = isVertical ? itemHeight : 1;
 
     // eslint-disable-next-line no-nested-ternary
     return isIncremental
@@ -299,6 +299,7 @@ class SpatialNavigationService {
       }
 
       case DIRECTION_LEFT: {
+
         const x = isSibling ? itemX + itemWidth : itemX;
 
         result.a = {
@@ -720,7 +721,9 @@ class SpatialNavigationService {
 
   onBackPress(keysDetails: KeyPressDetails) {
     this.log('onBackPress', '')
-    window.location.reload();
+    alert ('emulate back key')
+    
+   // window.location.reload();
   }
 
   onEnterPress(keysDetails: KeyPressDetails) {

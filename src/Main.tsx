@@ -106,6 +106,7 @@ const AppContainer = styled.div`
   height: 1080px;
   display: flex;
   flex-direction: row;
+  
 `;
 
 const ContentContainer = styled.div`
@@ -114,6 +115,9 @@ const ContentContainer = styled.div`
   height: 1080px;
   display: flex;
   flex-direction: column;
+  position:absolute;
+  left:2px;
+  z-index:2;
 `;
 
 const GlobalStyle = createGlobalStyle`
@@ -144,9 +148,9 @@ function DataContainer() {
     return <Context.Provider value={{ page, setPage, showContent, setShowContent }}>
     <AppContainer>
         <GlobalStyle />
-        {showMenu ? <Menu focusKey='MENU' />:null}
+        <Menu menuHidden={!showContent} focusKey='MENU' />
         <ContentContainer>    
-            <Content page={page} data={showContent?data:null} />
+            <Content page={page} data={data} />
         </ContentContainer>
     </AppContainer>
     </Context.Provider>

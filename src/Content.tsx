@@ -41,7 +41,6 @@ const ContentWrapper = styled.div`
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    margin-left:16px;
   `;
 
 const ScrollingRows = styled.div`

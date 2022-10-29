@@ -22,10 +22,12 @@ const menuData = [
 
 interface MenuWrapperProps {
     hasFocusedChild: boolean;
+    menuHidden: boolean;
 }
 
 interface MenuProps {
     focusKey: string;
+    menuHidden: boolean;
 }
 
 interface MenuItemProps {
@@ -56,9 +58,9 @@ const NmLogo = styled.img`
 const MenuItemBox = styled.div<MenuItemBoxProps>`
     width: 64px;
     height: 64px;
-    margin:16px;
+    margin: 24px;
     margin-bottom:8px;
-    padding: 8px;
+    padding: 0px;
     border-color: white;
     background-color: ${({ focused }) =>
         focused ? '#0e4181' : '#000000'};
@@ -67,16 +69,16 @@ const MenuItemBox = styled.div<MenuItemBoxProps>`
 
 const MenuWrapper = styled.div<MenuWrapperProps>`
     flex: 1;
-    margin:12px;
     max-width: ${({ hasFocusedChild }) =>
-    hasFocusedChild ? '140px' : '140px'};
+    hasFocusedChild ? '90px' : '90px'};
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: ${({ hasFocusedChild }) =>
-        hasFocusedChild ? '#000000' : '#000000'};
     padding-top: 37px;
-    position:relative;
+    position:absolute;
+    left:${({ menuHidden }) =>
+    menuHidden ? '3000px' : '0px'};
+    z-index:3;
   `;
 
 function MenuItem(props:any) {
@@ -103,11 +105,11 @@ function MenuItem(props:any) {
         }});
 
     return <div><MenuItemBox ref={ref} focused={focused}>
-         <Icon iconName={props.icon} size={64} color="white" />
+         <Icon iconName={props.icon} size={64} color="#858585" />
          </MenuItemBox><MenuText>{props.title}</MenuText></div>;
 }
 
-export function Menu({ focusKey: focusKeyParam }: MenuProps) {
+export function Menu({ focusKey: focusKeyParam, menuHidden: menuHidden}: MenuProps) {
     const {
         ref,
         focusSelf,
@@ -160,9 +162,11 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
         fetchData();
     }, []);
 
+    //debugger
+
     return (
         <FocusContext.Provider value={focusKey}>
-            <MenuWrapper ref={ref} hasFocusedChild={hasFocusedChild}>
+            <MenuWrapper ref={ref} hasFocusedChild={hasFocusedChild} menuHidden={menuHidden}>
                 <NmLogo src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKsStcAyNQkgX4BYz3_1qyHaffzqRijsJwtPOslbpdCT9IY02xW8bmXmJ2DuE68OS57rw&usqp=CAU" />
                 
                 {data.length > 0 ?

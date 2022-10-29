@@ -38,7 +38,7 @@ const SelectedItemCard = styled.div`
     position:absolute;
     text-align:left;
     padding:8px;
-    left: 56px;
+    left: 90px;
     top:64px;
     color: white;
     font-size: 78px;
