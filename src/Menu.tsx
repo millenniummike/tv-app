@@ -38,6 +38,15 @@ interface MenuItemBoxProps {
     focused: boolean;
 }
 
+const MenuText = styled.div`
+    text-align:center;
+    padding:8px;
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Arial';
+  `;
+
 const NmLogo = styled.img`
     height: 75px;
     width: 75px;
@@ -68,7 +77,6 @@ const MenuWrapper = styled.div<MenuWrapperProps>`
         hasFocusedChild ? '#000000' : '#000000'};
     padding-top: 37px;
     position:relative;
-    height:1200px;
   `;
 
 function MenuItem(props:any) {
@@ -96,7 +104,7 @@ function MenuItem(props:any) {
 
     return <div><MenuItemBox ref={ref} focused={focused}>
          <Icon iconName={props.icon} size={64} color="white" />
-         </MenuItemBox> {props.title}</div>;
+         </MenuItemBox><MenuText>{props.title}</MenuText></div>;
 }
 
 export function Menu({ focusKey: focusKeyParam }: MenuProps) {
@@ -128,8 +136,8 @@ export function Menu({ focusKey: focusKeyParam }: MenuProps) {
 
     //** TODO work out fixed menu focus key */
     useEffect(() => {
-        focusSelf();
-        //setFocus("sn:focusable-item-6");
+        //focusSelf();
+        setFocus("sn:focusable-item-52");
     }, [focusSelf]);
     
 

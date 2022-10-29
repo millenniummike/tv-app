@@ -83,30 +83,38 @@ const ContentRowScrollingContent = styled.div`
  `;
 
  const fadeIn = keyframes`
- 0% { opacity: 1}
- 20% { opacity: 0}
- 100% { opacity: 1; }
+ 0% { opacity: 0}
+ 30% { opacity: 0.1; }
+ 50% { opacity: 1; }
 `
 const fadeOut = keyframes`
 0% { opacity: 1}
-20% { opacity: 0}
-100% { opacity: 1; }
+30% { opacity: 0; }
+100% { opacity: 0; }
 `
 
-const AssetBox = styled.div<AssetBoxProps>`
+const AssetBoxFadein = styled.div<AssetBoxProps>`
     width: ${({ width }) => width};
     height: ${({ height }) => height};
     background-image: url('${({ backgroundImage }) => backgroundImage}');
     background-size: cover;
     background-color: ${({ color }) => color};
-    border-color: ${({ focused }) => (focused ? 'white' : 'black')};
-    border-style: solid;
-    border-width: ${({ focused }) => (focused ? '6px' : '6px')};
     box-sizing: border-box;
     border-radius: 7px;
-    animation-name: ${({ focused }) => (focused ? fadeIn: fadeOut)};
+    animation-name: ${fadeIn};
+    animation-duration: 3s;
+`;
+
+const AssetBoxFadeout = styled.div<AssetBoxProps>`
+    width: ${({ width }) => width};
+    height: ${({ height }) => height};
+    background-image: url('${({ backgroundImage }) => backgroundImage}');
+    background-size: cover;
+    background-color: ${({ color }) => color};
+    box-sizing: border-box;
+    border-radius: 7px;
+    animation-name: ${fadeOut};
     animation-duration: 2s;
-    animation-iteration-count: 1;
 `;
 
 const AssetTitle = styled.div`
@@ -140,11 +148,14 @@ const AssetWrapper = styled.div`
     });
     return (
         <AssetWrapper ref={ref}>
-           
-            <AssetBox width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
+           {focused?<AssetBoxFadein width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
             <AssetTitle>Asset Title</AssetTitle>
             <AssetText>Asset text</AssetText>
-            </AssetBox>
+            </AssetBoxFadein>:
+            <AssetBoxFadeout width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
+            <AssetTitle>Asset Title</AssetTitle>
+            <AssetText>Asset text</AssetText>
+            </AssetBoxFadeout>}
         </AssetWrapper>
     );
 }

@@ -75,7 +75,13 @@ export function Content(props: any) {
     }
     const [selectedAsset, setSelectedAsset] = useState(null);
 
+    const onAssetSpinnerPress = useCallback((asset: AssetProps) => {
+        alert ("pressed spinner asset")
+        setShowContent(false);
+    }, []);
+
     const onAssetPress = useCallback((asset: AssetProps) => {
+        alert ("pressed asset")
         setShowContent(true);
     }, []);
 
@@ -100,7 +106,6 @@ export function Content(props: any) {
     return (
         <FocusContext.Provider value={focusKey}>
             <ContentWrapper>
-
                 {selectedAsset ? <SelectedContent description={selectedAsset.description} backgroundImage={selectedAsset.backgroundImage} title={selectedAsset.title} color={''} width={''}></SelectedContent>:<div></div>}
                 
                 <ScrollingRows ref={ref}>
@@ -113,7 +118,7 @@ export function Content(props: any) {
                                     key={value.title+index}
                                     title={value.title}
                                     description={value.description}
-                                    onAssetPress={onAssetPress}
+                                    onAssetPress={onAssetSpinnerPress}
                                     onSelectAsset={onSelectSpinnerAsset}
                                     onFocus={onRowFocus}
                                 />
@@ -130,7 +135,18 @@ export function Content(props: any) {
                                     onFocus={onRowFocus}
                                 />
                             ))}
-                        </div> : <div></div>
+                        </div> : <div>
+                        <ContentRow
+                                    height={"200px"}
+                                    data={[]}
+                                    key={'key1'}
+                                    title={'title'}
+                                    description={'desc'}
+                                    onAssetPress={onAssetPress}
+                                    onSelectAsset={onSelectAsset}
+                                    onFocus={onRowFocus}
+                                />
+                        </div>
                     }
                 </ScrollingRows>
             </ContentWrapper>
