@@ -76,8 +76,8 @@ const MenuWrapper = styled.div<MenuWrapperProps>`
     align-items: center;
     padding-top: 37px;
     position:absolute;
-    left:${({ menuHidden }) =>
-    menuHidden ? '3000px' : '0px'};
+    display:${({ menuHidden }) =>
+    menuHidden ? 'none' : ''};
     z-index:3;
   `;
 

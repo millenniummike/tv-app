@@ -57,13 +57,13 @@ export function Content(props: any) {
     
     if (props.data)
     {
-        contentData=props.data['pages'][0].page.content
-        spinnerData=props.data['spinner'][0].page.content
+        contentData=props.data['pages'][props.page].page.content
+        spinnerData=props.data['spinner'][props.page].page.content
     } else {
         
     }
     //let contentData = []
-    const { setShowContent } = useContext(Context)
+    const { setShowContent, setPage } = useContext(Context)
     
 
     const { ref, focusKey } = useFocusable();
@@ -74,19 +74,26 @@ export function Content(props: any) {
     }
     const [selectedAsset, setSelectedAsset] = useState(null);
 
-    const onAssetSpinnerPress = useCallback((asset: AssetProps) => {
-        alert ("pressed spinner asset")
+    const onAssetSpinnerPress = (asset: AssetProps) => {
+        //alert ("pressed spinner asset");
+        setPage(1);
         setShowContent(false);
-    }, []);
+        
+    };
 
-    const onAssetPress = useCallback((asset: AssetProps) => {
-        alert ("pressed asset")
+    const onAssetPress = (asset: AssetProps) => {
+        //alert ("pressed asset");
+        setPage(0);
         setShowContent(true);
-    }, []);
+        window.location.reload();
+        
+    };
 
-    const onSelectAsset = useCallback((asset: AssetProps) => {
-        setSelectedAsset(asset);
-    }, []);
+    const onSelectAsset = (asset: AssetProps) => {
+        if (props.page==0){
+            setSelectedAsset(asset);
+        }
+    };
 
     const onSelectSpinnerAsset = useCallback((asset: AssetProps) => {
         setSelectedAsset(null)
@@ -108,7 +115,6 @@ export function Content(props: any) {
                 {selectedAsset ? <SelectedContent description={selectedAsset.description} backgroundImage={selectedAsset.backgroundImage} title={selectedAsset.title} color={''} width={''}></SelectedContent>:<div></div>}
                 
                 <ScrollingRows ref={ref}>
-                    {contentData.length > 0 ?
                         <div>
                             {spinnerData.map((value, index, array) => (
                                 <SpinnerRow
@@ -134,19 +140,7 @@ export function Content(props: any) {
                                     onFocus={onRowFocus}
                                 />
                             ))}
-                        </div> : <div>
-                        <ContentRow
-                                    height={"200px"}
-                                    data={[]}
-                                    key={'key1'}
-                                    title={'title'}
-                                    description={'desc'}
-                                    onAssetPress={onAssetPress}
-                                    onSelectAsset={onSelectAsset}
-                                    onFocus={onRowFocus}
-                                />
                         </div>
-                    }
                 </ScrollingRows>
             </ContentWrapper>
         </FocusContext.Provider>

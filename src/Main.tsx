@@ -143,12 +143,11 @@ function DataContainer() {
     const [showContent, setShowContent] = React.useState(true)
 
     if (isLoading) return <div>Loading...</div>
-    const showMenu = true;
 
     return <Context.Provider value={{ page, setPage, showContent, setShowContent }}>
     <AppContainer>
         <GlobalStyle />
-        <Menu menuHidden={!showContent} focusKey='MENU' />
+        {showContent?<Menu menuHidden={!showContent} focusKey='MENU' />:null}
         <ContentContainer>    
             <Content page={page} data={data} />
         </ContentContainer>
