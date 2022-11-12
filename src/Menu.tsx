@@ -22,12 +22,10 @@ const menuData = [
 
 interface MenuWrapperProps {
     hasFocusedChild: boolean;
-    menuHidden: boolean;
 }
 
 interface MenuProps {
     focusKey: string;
-    menuHidden: boolean;
 }
 
 interface MenuItemProps {
@@ -58,9 +56,9 @@ const NmLogo = styled.img`
 const MenuItemBox = styled.div<MenuItemBoxProps>`
     width: 64px;
     height: 64px;
-    margin: 24px;
+    margin:16px;
     margin-bottom:8px;
-    padding: 0px;
+    padding: 8px;
     border-color: white;
     background-color: ${({ focused }) =>
         focused ? '#0e4181' : '#000000'};
@@ -69,16 +67,16 @@ const MenuItemBox = styled.div<MenuItemBoxProps>`
 
 const MenuWrapper = styled.div<MenuWrapperProps>`
     flex: 1;
+    margin:12px;
     max-width: ${({ hasFocusedChild }) =>
-    hasFocusedChild ? '90px' : '90px'};
+    hasFocusedChild ? '140px' : '140px'};
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 37px;
     position:absolute;
-    display:${({ menuHidden }) =>
-    menuHidden ? 'none' : ''};
     z-index:3;
+
   `;
 
 function MenuItem(props:any) {
@@ -99,22 +97,25 @@ function MenuItem(props:any) {
     );
 
         //debugger
-    const { ref, focused} = useFocusable({ onFocus: onMenuItemFocus, onEnterPress: onMenuPress,
+    const { ref, focused, focusKey, setFocus} = useFocusable(
+        { onFocus: onMenuItemFocus, onEnterPress: onMenuPress,
+        focusKey:""+props.id,
         extraProps: {
             index:props.index
         }});
 
     return <div><MenuItemBox ref={ref} focused={focused}>
-         <Icon iconName={props.icon} size={64} color="#858585" />
+         <Icon iconName={props.icon} size={64} color="white" />
          </MenuItemBox><MenuText>{props.title}</MenuText></div>;
 }
 
-export function Menu({ focusKey: focusKeyParam, menuHidden: menuHidden}: MenuProps) {
+export function Menu({ focusKey: focusKeyParam }: MenuProps) {
     const {
         ref,
         focusSelf,
         hasFocusedChild,
         focusKey,
+        getCurrentFocusKey,
         setFocus,
         // navigateByDirection, -- to manually navigate by direction
         // pause, -- to pause all navigation events
@@ -138,8 +139,7 @@ export function Menu({ focusKey: focusKeyParam, menuHidden: menuHidden}: MenuPro
 
     //** TODO work out fixed menu focus key */
     useEffect(() => {
-        //focusSelf();
-        setFocus("sn:focusable-item-52");
+        setFocus("menu:0");
     }, [focusSelf]);
     
 
@@ -162,19 +162,17 @@ export function Menu({ focusKey: focusKeyParam, menuHidden: menuHidden}: MenuPro
         fetchData();
     }, []);
 
-    //debugger
-
     return (
         <FocusContext.Provider value={focusKey}>
-            <MenuWrapper ref={ref} hasFocusedChild={hasFocusedChild} menuHidden={menuHidden}>
+            <MenuWrapper ref={ref} hasFocusedChild={hasFocusedChild}>
                 <NmLogo src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKsStcAyNQkgX4BYz3_1qyHaffzqRijsJwtPOslbpdCT9IY02xW8bmXmJ2DuE68OS57rw&usqp=CAU" />
                 
                 {data.length > 0 ?
                         <div>
                             {data.map((value, index, array) => (
                                 hasFocusedChild ? 
-                                <MenuItem icon={value.icon} key={index} index={index} menuFocus={hasFocusedChild} title={value.title} /> :
-                                <MenuItem icon={value.icon} key={index} index={index} menuFocus={hasFocusedChild} title={''} />
+                                <MenuItem id={"menu:"+index} icon={value.icon} key={index} index={index} menuFocus={hasFocusedChild} title={value.title} /> :
+                                <MenuItem id={"menu:"+index} icon={value.icon} key={index} index={index} menuFocus={hasFocusedChild} title={''} />
                             ))}
                         </div> : <div></div>
                     }

@@ -39,6 +39,7 @@ interface AssetProps {
     width: string;
     height: string;
     backgroundImage: string;
+    id: string;
     fadeIn: () => void;
     fadeOut: () => void;
     onEnterPress: (props: object, details: KeyPressDetails) => void;
@@ -104,8 +105,9 @@ const AssetBoxFadein = styled.div<AssetBoxProps>`
     background-color: ${({ color }) => color};
     box-sizing: border-box;
     border-radius: 7px;
-    animation-name: ${fadeAnimateIn};
     animation-duration: 3s;
+    animation-name: ${fadeAnimateIn};
+
 `;
 
 const AssetBoxFadeout = styled.div<AssetBoxProps>`
@@ -116,8 +118,8 @@ const AssetBoxFadeout = styled.div<AssetBoxProps>`
     background-color: ${({ color }) => color};
     box-sizing: border-box;
     border-radius: 7px;
-    animation-name: ${fadeAnimateOut};
     animation-duration: 2s;
+    animation-name: ${fadeAnimateOut};
 `;
 
 const AssetTitle = styled.div`
@@ -138,18 +140,20 @@ const AssetWrapper = styled.div`
   `;
 
 
-
-  function Asset({ title, color, width, height, backgroundImage, description, onEnterPress, onFocus}: AssetProps) {
-    const [transition, setTransition] = useState(false);
+  function Asset({ title, color, width, height, backgroundImage, description, id, onEnterPress, onFocus}: AssetProps) {
+    let idCounter = 0;
+    const [transition, setTransition] = useState(true);
     const fadeIn = () => {
         setTransition(true);
     }
     const fadeOut = () => {
         setTransition(false);
     }
+
     const { ref, focused } = useFocusable({
         onEnterPress,
         onFocus,
+        focusKey:id,
         extraProps: {
             title,
             color,
@@ -162,7 +166,8 @@ const AssetWrapper = styled.div`
 
     return (
         <AssetWrapper ref={ref}>
-           {transition?<AssetBoxFadein width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
+           {transition?
+           <AssetBoxFadein width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
             <AssetTitle>Asset Title</AssetTitle>
             <AssetText>Asset text</AssetText>
             </AssetBoxFadein>:
@@ -195,18 +200,20 @@ export function SpinnerRow({
     let previousAsset = null;
     const onAssetFocus = useCallback(
         ({ x }: { x: number }, asset: AssetProps) => {
-            if (previousAsset) {
-               previousAsset.fadeOut();
-            }
-            previousAsset = asset;
-            onSelectAsset(asset)
+            
             if (scrollingRef.current.scrollLeft!=x){
                 asset.fadeIn();
+                if (previousAsset) {
+                    previousAsset.fadeOut();
+                 }
                 scrollingRef.current.scrollTo({
                     left: x,
                     behavior: 'smooth'
                 });
             }
+            
+            previousAsset = asset;
+            onSelectAsset(asset)
         },
         [scrollingRef]
     );
@@ -222,6 +229,7 @@ export function SpinnerRow({
                                 description={description}
                                 height={height}
                                 width={width}
+                                id={"spinner:"+index}
                                 key={title+index}
                                 title={title}
                                 color={height=="200px"?"":color}

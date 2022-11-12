@@ -129,8 +129,7 @@ const useFocusableHook = <P>({
    * Either using the propFocusKey passed in, or generating a random one
    */
   const focusKey = useMemo(
-    () => propFocusKey || uniqueId('sn:focusable-item-'),
-    [propFocusKey]
+    () => propFocusKey || uniqueId('sn:focusable-item-'),[propFocusKey]
   );
 
   const focusSelf = useCallback(() => {

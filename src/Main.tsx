@@ -17,7 +17,7 @@ import { Context } from './Context'
 const queryClient = new QueryClient()
 
 init({
-    debug: false,
+    debug: true,
     visualDebug: false
 });
 
@@ -106,7 +106,6 @@ const AppContainer = styled.div`
   height: 1080px;
   display: flex;
   flex-direction: row;
-  
 `;
 
 const ContentContainer = styled.div`
@@ -115,9 +114,6 @@ const ContentContainer = styled.div`
   height: 1080px;
   display: flex;
   flex-direction: column;
-  position:absolute;
-  left:2px;
-  z-index:2;
 `;
 
 const GlobalStyle = createGlobalStyle`
@@ -140,17 +136,18 @@ function DataContainer() {
     );
 
     const [page, setPage] = React.useState(0)
-    const [showContent, setShowContent] = React.useState(true)
+    const [showMenu, setshowMenu] = React.useState(true)
 
     if (isLoading) return <div>Loading...</div>
 
-    return <Context.Provider value={{ page, setPage, showContent, setShowContent }}>
+    return <Context.Provider value={{ page, setPage, showMenu, setshowMenu }}>
     <AppContainer>
         <GlobalStyle />
-        {showContent?<Menu menuHidden={!showContent} focusKey='MENU' />:null}
+        {page==0?<Menu focusKey='MENU' />:null}
         <ContentContainer>    
             <Content page={page} data={data} />
         </ContentContainer>
+        
     </AppContainer>
     </Context.Provider>
 }

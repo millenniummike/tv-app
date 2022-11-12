@@ -39,6 +39,7 @@ interface AssetProps {
     width: string;
     height: string;
     backgroundImage: string;
+    key:string;
     onEnterPress: (props: object, details: KeyPressDetails) => void;
     onFocus: (
         layout: FocusableComponentLayout,
@@ -53,6 +54,7 @@ interface AssetBoxProps {
     width: string;
     height: string;
     backgroundImage: string;
+    key:string;
 }
 
 const ContentRowWrapper = styled.div`
@@ -110,10 +112,11 @@ const AssetWrapper = styled.div`
   `;
 
 
-  function Asset({ title, color, width, height, backgroundImage, description, onEnterPress, onFocus }: AssetProps) {
+  function Asset({ title, color, width, height, backgroundImage, key, description, onEnterPress, onFocus }: AssetProps) {
     const { ref, focused } = useFocusable({
         onEnterPress,
         onFocus,
+        focusKey:key,
         extraProps: {
             title,
             color,
@@ -124,7 +127,7 @@ const AssetWrapper = styled.div`
 
     return (
         <AssetWrapper ref={ref}>
-            <AssetBox width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
+            <AssetBox width={width} height={height} key={key} backgroundImage={backgroundImage} color={color} focused={focused}>
             </AssetBox>
             <AssetTitle>{title}</AssetTitle>
         </AssetWrapper>

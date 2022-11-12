@@ -9,6 +9,8 @@ import throttle from 'lodash/throttle';
 import difference from 'lodash/difference';
 import measureLayout from './measureLayout';
 import VisualDebugger from './VisualDebugger';
+import { Context } from './Context'
+import { useContext } from 'react';
 
 const DIRECTION_LEFT = 'left';
 const DIRECTION_RIGHT = 'right';
@@ -299,7 +301,6 @@ class SpatialNavigationService {
       }
 
       case DIRECTION_LEFT: {
-
         const x = isSibling ? itemX + itemWidth : itemX;
 
         result.a = {
@@ -645,9 +646,11 @@ class SpatialNavigationService {
           pressedKeys: this.pressedKeys
         };
 
+       // const { setshowMenu, setPage} = useContext(Context)
+
+        //alert(event.keyCode);
         if (eventType === KEY_BACK && this.focusKey) {
           this.onBackPress(keysDetails);
-
           return;
         }
         
@@ -721,9 +724,6 @@ class SpatialNavigationService {
 
   onBackPress(keysDetails: KeyPressDetails) {
     this.log('onBackPress', '')
-    alert ('emulate back key')
-    
-   // window.location.reload();
   }
 
   onEnterPress(keysDetails: KeyPressDetails) {
