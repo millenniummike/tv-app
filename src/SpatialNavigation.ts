@@ -26,8 +26,8 @@ const DEFAULT_KEY_MAP = {
   [DIRECTION_RIGHT]: [39],
   [DIRECTION_DOWN]: [40],
   [KEY_ENTER]: [13],
-  [KEY_BACK]: [8],
-  [KEY_BACKDELETE]: [10009]
+  [KEY_BACKDELETE]: [8],
+  [KEY_BACK]: [10009]
 };
 // return on remote is 10009
 
@@ -651,7 +651,7 @@ class SpatialNavigationService {
        // const { setshowMenu, setPage} = useContext(Context)
 
         //alert(event.keyCode);
-        if (eventType === KEY_BACK && this.focusKey) {
+        if ((eventType === KEY_BACK || eventType === KEY_BACKDELETE) && this.focusKey) {
           this.onBackPress(keysDetails);
           return;
         }
