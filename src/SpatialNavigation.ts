@@ -649,8 +649,8 @@ class SpatialNavigationService {
         };
 
        // const { setshowMenu, setPage} = useContext(Context)
-
-        alert(event.keyCode);
+        
+       alert("key="+event.keyCode);
         if ((eventType === KEY_BACK || eventType === KEY_BACKDELETE) && this.focusKey) {
           this.onBackPress(keysDetails);
           return;
