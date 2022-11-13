@@ -107,6 +107,7 @@ export function Content(props: any) {
         const keyDown = ({ key }) => {
             if (key == "Backspace" || key == "XF86Back") {
                 let toPage = pageRef.current;
+                alert(toPage)
                 if (toPage==0) {
                 if (confirm("Exit the application?") == true) {
                     window.tizen.application.getCurrentApplication().exit();
