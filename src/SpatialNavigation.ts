@@ -18,7 +18,7 @@ const DIRECTION_UP = 'up';
 const DIRECTION_DOWN = 'down';
 const KEY_ENTER = 'enter';
 const KEY_BACK = 'back';
-const KEY_BACKDELETE = 'back';
+const KEY_BACKDELETE = 'backdelete';
 
 const DEFAULT_KEY_MAP = {
   [DIRECTION_LEFT]: [37],
@@ -632,6 +632,9 @@ class SpatialNavigationService {
         }
 
         const eventType = this.getEventType(event.keyCode);
+        //debugger
+        //alert("key="+eventType);
+        //alert("key="+event.keyCode);
 
         if (!eventType) {
           return;
@@ -650,7 +653,7 @@ class SpatialNavigationService {
 
        // const { setshowMenu, setPage} = useContext(Context)
         
-       alert("key="+eventType);
+       
         if ((eventType === KEY_BACK || eventType === KEY_BACKDELETE) && this.focusKey) {
           this.onBackPress(keysDetails);
           return;
