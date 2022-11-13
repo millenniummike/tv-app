@@ -78,21 +78,18 @@ export function Content(props: any) {
     let pageRef = useRef(0);
     let previousFocusKeyRef = useRef("");
     // Add event listeners
+
     useEffect(() => {
+
+        // **TODO handle through main key press handler
         const keyDown = ({ key }) => {
+            alert(key)
             if (key == "Backspace") {
-                //debugger
-                //setshowMenu(true);
                 let toPage = pageRef.current;
                 toPage--;
                 if (toPage < 0) { toPage = 0; }
                 setPage(toPage);
                 pageRef.current = toPage;
-                const timeout = setTimeout(() => {
-                    //getCurrentFocusKey("sn:focusable-item-54");
-                    //getCurrentFocusKey(previousFocusKeyRef.current);
-                }, 1000)
-
             }
         }
         window.addEventListener("keydown", keyDown);

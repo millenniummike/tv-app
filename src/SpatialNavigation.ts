@@ -632,9 +632,6 @@ class SpatialNavigationService {
         }
 
         const eventType = this.getEventType(event.keyCode);
-        //debugger
-        //alert("key="+eventType);
-        //alert("key="+event.keyCode);
 
         if (!eventType) {
           return;
@@ -727,7 +724,6 @@ class SpatialNavigationService {
   }
 
   onBackPress(keysDetails: KeyPressDetails) {
-    alert('handle back')
     this.log('onBackPress', '')
   }
 
