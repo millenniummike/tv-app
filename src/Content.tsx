@@ -85,6 +85,7 @@ export function Content(props: any) {
         const keyDown = ({ key }) => {
             alert(key)
             if (key == "Backspace" || key == "XF86Back") {
+                alert("Back")
                 let toPage = pageRef.current;
                 toPage--;
                 if (toPage < 0) { toPage = 0; }
