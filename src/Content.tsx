@@ -83,11 +83,7 @@ export function Content(props: any) {
 
         // **TODO handle through main key press handler
         const keyDown = ({ key }) => {
-            alert("..."+key+"....")
-
-            if (key == "XF86Back"){alert("YES!")}
             if (key == "Backspace" || key == "XF86Back") {
-                alert("Back")
                 let toPage = pageRef.current;
                 toPage--;
                 if (toPage < 0) { toPage = 0; }
