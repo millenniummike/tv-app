@@ -1,0 +1,2 @@
+Restructure data for assets
+- Handle back in navigator

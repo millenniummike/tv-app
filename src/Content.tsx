@@ -92,13 +92,9 @@ export function Content(props: any) {
     })
     console.log("******")
     console.log(props.data['pages'][0].page.content[0].assets)
-    //debugger
-    //console.log(selectedData)
-
     } else {
 
     }
-    
 
     let pageRef = useRef(0);
     let previousFocusKeyRef = useRef("");
@@ -107,9 +103,18 @@ export function Content(props: any) {
     useEffect(() => {
 
         // **TODO handle through main key press handler
+        // ** link to spatialnavigation
         const keyDown = ({ key }) => {
             if (key == "Backspace" || key == "XF86Back") {
                 let toPage = pageRef.current;
+                if (toPage==0) {
+                if (confirm("Exit the application?") == true) {
+                    window.tizen.application.getCurrentApplication().exit();
+                  } else {
+              
+                  }
+                }
+
                 toPage--;
                 if (toPage < 0) { toPage = 0; }
                 setPage(toPage);
