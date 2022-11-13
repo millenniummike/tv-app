@@ -18,6 +18,7 @@ const DIRECTION_UP = 'up';
 const DIRECTION_DOWN = 'down';
 const KEY_ENTER = 'enter';
 const KEY_BACK = 'back';
+const KEY_BACKDELETE = 'back';
 
 const DEFAULT_KEY_MAP = {
   [DIRECTION_LEFT]: [37],
@@ -25,7 +26,8 @@ const DEFAULT_KEY_MAP = {
   [DIRECTION_RIGHT]: [39],
   [DIRECTION_DOWN]: [40],
   [KEY_ENTER]: [13],
-  [KEY_BACK]: [8]
+  [KEY_BACK]: [8],
+  [KEY_BACKDELETE]: [10009]
 };
 // return on remote is 10009
 
