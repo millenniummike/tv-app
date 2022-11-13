@@ -11,6 +11,7 @@ import {
 interface AssetData {
     title: string;
     description: string;
+    id: number;
     color: string;
     width: string;
     height: string;
@@ -33,6 +34,7 @@ interface ContentRowProps {
 }
 
 interface AssetProps {
+    id: number;
     title: string;
     description: string;
     color: string;
@@ -112,12 +114,13 @@ const AssetWrapper = styled.div`
   `;
 
 
-  function Asset({ title, color, width, height, backgroundImage, key, description, onEnterPress, onFocus }: AssetProps) {
+  function Asset({ id, title, color, width, height, backgroundImage, key, description, onEnterPress, onFocus }: AssetProps) {
     const { ref, focused } = useFocusable({
         onEnterPress,
         onFocus,
         focusKey:key,
         extraProps: {
+            id,
             title,
             color,
             backgroundImage,
@@ -129,7 +132,7 @@ const AssetWrapper = styled.div`
         <AssetWrapper ref={ref}>
             <AssetBox width={width} height={height} key={key} backgroundImage={backgroundImage} color={color} focused={focused}>
             </AssetBox>
-            <AssetTitle>{title}</AssetTitle>
+            <AssetTitle>{id} - {title}</AssetTitle>
         </AssetWrapper>
     );
 }
@@ -165,12 +168,13 @@ export function ContentRow({
                 <ContentRowTitle>{rowTitle}</ContentRowTitle>
                 <ContentRowScrollingWrapper ref={scrollingRef}>
                     <ContentRowScrollingContent>
-                        {data.map(({ title, description, color, backgroundImage, width},index) => (
+                        {data.map(({ id, title, description, color, backgroundImage, width},index) => (
                             <Asset
                                 backgroundImage={backgroundImage}
                                 description={description}
                                 height={height}
                                 width={width}
+                                id={id}
                                 key={title+index}
                                 title={title}
                                 color={color}

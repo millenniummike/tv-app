@@ -17,7 +17,7 @@ import { Context } from './Context'
 const queryClient = new QueryClient()
 
 init({
-    debug: true,
+    debug: false,
     visualDebug: false
 });
 
@@ -136,16 +136,17 @@ function DataContainer() {
     );
 
     const [page, setPage] = React.useState(0)
+    const [id, setId] = React.useState(0)
     const [showMenu, setshowMenu] = React.useState(true)
 
     if (isLoading) return <div>Loading...</div>
 
-    return <Context.Provider value={{ page, setPage, showMenu, setshowMenu }}>
+    return <Context.Provider value={{ page, setPage, id, setId, showMenu, setshowMenu }}>
     <AppContainer>
         <GlobalStyle />
         {page==0?<Menu focusKey='MENU' />:null}
         <ContentContainer>    
-            <Content page={page} data={data} />
+            <Content id={id} page={page} data={data} />
         </ContentContainer>
         
     </AppContainer>

@@ -19,6 +19,7 @@ interface AssetProps {
     color: string;
     width: string;
     backgroundImage: string;
+    id: number;
     onEnterPress: (props: object, details: KeyPressDetails) => void;
     onSelectAsset: (props: object) => void;
     onFocus: (
@@ -63,17 +64,41 @@ export function Content(props: any) {
 
     let contentData = []
     let spinnerData = []
+    let selectedData = []
+    const { setshowMenu, id, setId, setPage, page } = useContext(Context)
+    const { ref, focusKey, focusSelf, getCurrentFocusKey, setFocus } = useFocusable({
+        saveLastFocusedChild: true
+    });
+
 
     if (props.data && props.page < 2) {
         contentData = props.data['pages'][props.page].page.content
         spinnerData = props.data['spinner'][props.page].page.content
+
+        selectedData = []
+
+    selectedData.push(
+    {
+        "assets": [
+            {
+                "title": props.data['pages'][0].page.content[0].assets[id].title,
+                "color": "#000000",
+                "backgroundImage": props.data['pages'][0].page.content[0].assets[id].backgroundImage,
+                "width": "1920px",
+                "height": "700px",
+                "description":props.data['pages'][0].page.content[0].assets[id].description
+            }
+        ]
+    })
+    console.log("******")
+    console.log(props.data['pages'][0].page.content[0].assets)
+    //debugger
+    //console.log(selectedData)
+
     } else {
 
     }
-    const { setshowMenu, setPage, page } = useContext(Context)
-    const { ref, focusKey, focusSelf, getCurrentFocusKey, setFocus } = useFocusable({
-        saveLastFocusedChild: true
-    });
+    
 
     let pageRef = useRef(0);
     let previousFocusKeyRef = useRef("");
@@ -118,6 +143,7 @@ export function Content(props: any) {
     const onAssetPress = useCallback((asset: AssetProps) => {
         if (props.page == 0) {
             setPage(1);
+            setId(asset.id);
             pageRef.current = 1;
             previousFocusKeyRef.current = getCurrentFocusKey();
             setFocus("spinner:0");
@@ -147,13 +173,14 @@ export function Content(props: any) {
         [ref]
     );
 
+    console.log(props)
     switch (props.page) {
         case 0:
             return (
                 <FocusContext.Provider value={focusKey}>
                     {props.page == 2 ? <VideoContainer id="video" src="http://techslides.com/demos/sample-videos/small.mp4" loop autoPlay preload="auto"></VideoContainer> : null}
                     <ContentWrapper>
-                        {selectedAsset ? <SelectedContent description={selectedAsset.description} backgroundImage={selectedAsset.backgroundImage} title={selectedAsset.title} color={''} width={''}></SelectedContent> : <div></div>}
+                        {selectedAsset ? <SelectedContent description={selectedAsset.description} backgroundImage={selectedAsset.backgroundImage} title={id + " - " + selectedAsset.title} color={''} width={''}></SelectedContent> : <div></div>}
                         <ScrollingRows ref={ref}>
                             <div>
                                 {spinnerData.map((value, index, array) => (
@@ -190,10 +217,9 @@ export function Content(props: any) {
                 <FocusContext.Provider value={focusKey}>
                     <ContentWrapper>
                         {selectedAsset ? <SelectedContent description={selectedAsset.description} backgroundImage={selectedAsset.backgroundImage} title={selectedAsset.title} color={''} width={''}></SelectedContent> : <div></div>}
-                        <div>Specific Selected Content</div>
                         <ScrollingRows ref={ref}>
                             <div>
-                                {spinnerData.map((value, index, array) => (
+                                {selectedData.map((value, index, array) => (
                                     <SpinnerRow
                                         data={value.assets}
                                         height={selectedAsset ? "200px" : "600px"}

@@ -19,7 +19,6 @@ interface AssetData {
 }[];
 
 interface ContentRowProps {
-    data: AssetData[];
     title: string;
     description: string,
     height: string,
@@ -168,8 +167,8 @@ const AssetWrapper = styled.div`
         <AssetWrapper ref={ref}>
            {transition?
            <AssetBoxFadein width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
-            <AssetTitle>{title}</AssetTitle>
-            <AssetText>{description}</AssetText>
+            <AssetTitle>Asset Title</AssetTitle>
+            <AssetText>Asset text</AssetText>
             </AssetBoxFadein>:
             <AssetBoxFadeout width={width} height={height} backgroundImage={backgroundImage} color={color} focused={focused}>
             <AssetTitle>Asset Title</AssetTitle>
@@ -179,9 +178,8 @@ const AssetWrapper = styled.div`
     );
 }
 
-export function SpinnerRow({
+export function SelectedAsset({
     description: description,
-    data: data,
     title: rowTitle,
     height: height,
     onAssetPress,
@@ -223,22 +221,7 @@ export function SpinnerRow({
             <ContentRowWrapper ref={ref}>
                 <ContentRowScrollingWrapper ref={scrollingRef}>
                     <ContentRowScrollingContent>
-                        {data.map(({ title, description, color, backgroundImage, width},index) => (
-                           <Asset
-                                backgroundImage={height=="200px"?"":backgroundImage}
-                                description={description}
-                                height={height}
-                                width={width}
-                                id={"spinner:"+index}
-                                key={title+index}
-                                title={title}
-                                color={height=="200px"?"":color}
-                                onEnterPress={onAssetPress}
-                                onFocus={onAssetFocus}
-                                fadeIn={fadeIn}
-                                fadeOut={fadeOut}
-                            />
-                        ))}
+                           <div>Test</div>
                     </ContentRowScrollingContent>
                 </ContentRowScrollingWrapper>
             </ContentRowWrapper>
