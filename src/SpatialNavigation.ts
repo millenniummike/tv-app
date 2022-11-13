@@ -650,13 +650,12 @@ class SpatialNavigationService {
 
        // const { setshowMenu, setPage} = useContext(Context)
         
-       alert("key="+event.keyCode);
+       alert("key="+eventType);
         if ((eventType === KEY_BACK || eventType === KEY_BACKDELETE) && this.focusKey) {
           this.onBackPress(keysDetails);
           return;
         }
         
-
         if (eventType === KEY_ENTER && this.focusKey) {
           this.onEnterPress(keysDetails);
 
@@ -725,6 +724,7 @@ class SpatialNavigationService {
   }
 
   onBackPress(keysDetails: KeyPressDetails) {
+    alert('handle back')
     this.log('onBackPress', '')
   }
 
